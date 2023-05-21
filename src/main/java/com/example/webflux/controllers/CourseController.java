@@ -1,19 +1,39 @@
 package com.example.webflux.controllers;
 
 import com.example.webflux.models.Course;
+import com.example.webflux.models.Student;
+import com.example.webflux.models.StudentCourse;
+import com.example.webflux.repos.StudentCourseRepo;
 import com.example.webflux.services.CourseService;
+import com.example.webflux.services.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/course")
 public class CourseController {
     private final CourseService service;
+    private final StudentService studentService;
+    private final StudentCourseRepo studentCourseRepo;
 
-    public CourseController(CourseService service) {
+    public CourseController(CourseService service, StudentService studentService, StudentCourseRepo studentCourseRepo) {
         this.service = service;
+        this.studentService = studentService;
+        this.studentCourseRepo = studentCourseRepo;
+    }
+
+    @GetMapping("/get_students/{courseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Mono<Student>> getStudents(@PathVariable("courseId") Integer courseId) {
+        Flux<StudentCourse> studentCourseFlux = studentCourseRepo.getStudentCoursesByCourseId(courseId);
+        List<Mono<Student>> studentlist = new ArrayList<>();
+        studentCourseFlux.subscribe(studentCourse -> studentlist.add(studentService.getOne(studentCourse.getCourseId())));
+        return studentlist;
     }
 
     @GetMapping("/")
