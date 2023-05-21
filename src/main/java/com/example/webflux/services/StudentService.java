@@ -5,15 +5,25 @@ import com.example.webflux.repos.StudentRepo;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-@Service
-public class StudentService {
-    private final StudentRepo repo;
+import java.util.Optional;
 
-    public StudentService(StudentRepo repo) {
-        this.repo = repo;
+@Service
+public class StudentService extends ParentService<Student, StudentRepo>{
+
+    public StudentService(StudentRepo repository) {
+        super(repository);
     }
 
-    public Mono<Student> save(Student student) {
-        return repo.save(student);
+    @Override
+    public Mono<Student> update(int id, Student student) {
+        return repository.findById(id).map(Optional::of).defaultIfEmpty(Optional.empty())
+                .flatMap(optionalStudent -> {
+                    if (optionalStudent.isPresent()) {
+                        student.setId(id);
+                        return repository.save(student);
+                    }
+
+                    return Mono.empty();
+                });
     }
 }

@@ -7,8 +7,6 @@ public class Student {
     private int id;
     private String firstname;
     private String lastname;
-    private String fatherName;
-    private String studentID;
 
     public int getId() {
         return id;
@@ -34,19 +32,4 @@ public class Student {
         this.lastname = lastname;
     }
 
-    public String getFatherName() {
-        return fatherName;
-    }
-
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
-    }
-
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
 }
