@@ -1,6 +1,5 @@
 package com.example.webflux.controllers;
 
-import com.example.webflux.models.Course;
 import com.example.webflux.models.Student;
 import com.example.webflux.models.StudentCourse;
 import com.example.webflux.repos.StudentCourseRepo;
@@ -10,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -30,11 +26,9 @@ public class StudentController {
 
     @GetMapping("/get_courses/{studentId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Mono<Course>> getCourses(@PathVariable("studentId") Integer studentId) {
+    public Flux<StudentCourse> getCourses(@PathVariable("studentId") Integer studentId) {
         Flux<StudentCourse> studentCourseFlux = studentCourseRepo.getStudentCoursesByStudentId(studentId);
-        List<Mono<Course>> courseList = new ArrayList<>();
-        studentCourseFlux.subscribe(studentCourse -> courseList.add(courseService.getOne(studentCourse.getCourseId())));
-        return courseList;
+        return studentCourseFlux.doOnNext(studentCourse -> courseService.getOne(studentCourse.getCourseId()));
     }
 
     @GetMapping("/")
