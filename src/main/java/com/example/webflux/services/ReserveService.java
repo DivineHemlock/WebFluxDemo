@@ -24,6 +24,7 @@ public class ReserveService {
                 studentCourse.setCourseId(courseId);
                 // increment current capacity
                 course.setCurrentCapacity(course.getCurrentCapacity() + 1);
+                courseService.save(course);
                 return studentCourseService.save(studentCourse);
             }
             return Mono.error(new Exception("class is full"));
