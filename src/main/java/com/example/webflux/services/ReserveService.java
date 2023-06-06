@@ -2,6 +2,7 @@ package com.example.webflux.services;
 
 import com.example.webflux.models.StudentCourse;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -15,8 +16,8 @@ public class ReserveService {
         this.courseService = courseService;
     }
 
-    public Mono<StudentCourse> reserve(int studentId, int courseId) throws Exception {
-        return courseService.getOne(courseId).flatMap(course ->
+    public Flux<StudentCourse> reserve(int studentId, int courseId) throws Exception {
+        return courseService.getOne(courseId).flux().flatMap(course ->
         {
             StudentCourse studentCourse = studentCourse = new StudentCourse();;
             if (course.getCurrentCapacity() < course.getMaxCapacity()) {
@@ -28,6 +29,6 @@ public class ReserveService {
                 return studentCourseService.save(studentCourse);
             }
             return Mono.error(new Exception("class is full"));
-        });
+        }, 1);
     }
 }

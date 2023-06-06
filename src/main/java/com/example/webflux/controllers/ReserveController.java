@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/reserve")
@@ -25,7 +25,7 @@ public class ReserveController {
     }
 
     @PostMapping("/{studentId}/{courseId}")
-    public Mono<StudentCourse> reserve(@PathVariable("studentId") int studentId, @PathVariable("courseId") int courseId) throws Exception {
+    public Flux<StudentCourse> reserve(@PathVariable("studentId") int studentId, @PathVariable("courseId") int courseId) throws Exception {
         return reserveService.reserve(studentId, courseId);
     }
 }
