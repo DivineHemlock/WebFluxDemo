@@ -8,6 +8,8 @@ public class Course {
     private String name;
     private String professor;
     private String semester;
+    private int currentCapacity;
+    private int maxCapacity;
 
     public int getId() {
         return id;
@@ -39,5 +41,21 @@ public class Course {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public int getCurrentCapacity() {
+        return currentCapacity;
+    }
+
+    public void setCurrentCapacity(int currentCapacity) {
+        this.currentCapacity = currentCapacity;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
     }
 }

@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS public.course(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     professor VARCHAR(255),
-    semester VARCHAR(255)
+    semester VARCHAR(255),
+    current_capacity int,
+    max_capacity int
 );
 
 DROP TABLE IF EXISTS public.student_course;
